@@ -67,9 +67,14 @@ export default function CarList() {
     }
   };
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setForm((prev) => ({
+    ...prev,
+    [name]: ['color_id', 'year'].includes(name) ? Number(value) : value,
+  }));
+};
+
 
   const handleSubmit = async () => {
     try {
@@ -93,7 +98,7 @@ export default function CarList() {
     setForm({
       brand: car.brand,
       model: car.model,
-      color: car.color?.id || '',
+      color_id: car.color?.id || '',
       year: car.year,
     });
     setShowModal(true);
@@ -104,7 +109,7 @@ export default function CarList() {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`http://localhost:8000/api/cars/${id}`);
+      await axios.delete(`/api/cars/${id}`);
       fetchCars(page);
     } catch (error) {
       console.error('Error deleting car:', error);

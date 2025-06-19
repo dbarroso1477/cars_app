@@ -5,8 +5,8 @@ import AuthPage from './components/AuthPage';
 import CarList from './components/CarList';
 import axios from 'axios';
 
+axios.defaults.baseURL = 'https://09b1-80-29-143-44.ngrok-free.app';
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:8000';
 
 ReactDOM.createRoot(document.getElementById('app')).render(
   <BrowserRouter>

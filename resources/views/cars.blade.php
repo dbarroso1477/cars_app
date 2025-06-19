@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cars App</title>
-    @viteReactRefresh
-    @vite('resources/js/app.jsx')
+    <script type="module" src="{{ secure_asset('build/assets/app-CWl3o_qf.js') }}"></script>
 </head>
 <body>
     <div id="app"></div>
