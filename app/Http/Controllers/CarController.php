@@ -7,9 +7,27 @@ use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Car::with('color')->orderBy('created_at', 'desc')->paginate(5);
+        $query = Car::with('color');
+
+        if ($request->brand) {
+            $query->where('brand', $request->brand);
+        }
+
+        if ($request->model) {
+            $query->where('model', $request->model);
+        }
+
+        if ($request->color) {
+            $query->whereHas('color', fn($q) => $q->where('name', $request->color));
+        }
+
+        if ($request->year) {
+            $query->where('year', $request->year);
+        }
+
+        return $query->orderBy('created_at', 'desc')->paginate(5);
     }
 
     public function store(Request $request)
@@ -41,5 +59,15 @@ class CarController extends Controller
     {
         $car->delete();
         return response()->json(['message' => 'Car deleted']);
+    }
+
+    public function filters()
+    {
+        return response()->json([
+            'brands' => Car::select('brand')->distinct()->pluck('brand'),
+            'models' => Car::select('model')->distinct()->pluck('model'),
+            'years'  => Car::select('year')->distinct()->pluck('year')->sortDesc()->values(),
+            'colors' => \App\Models\Color::select('id', 'name')->get(),
+        ]);
     }
 }
